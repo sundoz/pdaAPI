@@ -6,5 +6,7 @@ services:
     working_dir: /web
     volumes:
       - .:/web
+    ports:
+    - "8000:8000"
     
     command: python main.py
