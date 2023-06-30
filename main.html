@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Согласие на обработку персональных данных</title>
+  <style>
+    /* Add your custom CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      max-width: 800px; /* Set the maximum width for the text */
+      margin: 0 auto; /* Center the content horizontally */
+    }
+    
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    p {
+        text-align: justify;
+        text-indent: 40px;
+        margin-bottom: 10px;
+        padding: 5px;
+        font-family: "Roboto", sans-serif;
+      
+    }
+    
+    .buttons {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    .button:hover {
+    /* Button hover effect */
+        background-color: #ddd;
+    }
+
+    .button:active {
+    /* Button click effect */
+        background-color: #bbb;
+    }
+    .agree {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .disagree {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .text-container {
+    background-color: #f9f9f9; /* Set a background color for the container */
+    padding: 20px; /* Add padding inside the container */
+    border-radius: 5px; /* Add rounded corners to the container */
+  }
+  </style>
+</head>
+<body>
+    <div class="text-container">
+  <h1>Согласие на обработку персональных данных</h1>
+  <p>Настоящим даю свое согласие кандидату в депутаты Законодательного Собрания Ростовской области по одномандатному избирательному округу 28. Азовский (городской) одномандатный избирательный округ Бурыке Денису Васильевичу на обработку моих персональных данных, относящихся исключительно к перечисленным ниже категориям персональных данных: фамилия, имя, отчество; пол; адрес места жительства, номер телефона в целях выдвижения их кандидатами на выборах в органы местного самоуправления, проведении избирательной кампании и предвыборной агитации.</p>
+  <p>Настоящее согласие предоставляется на осуществление действий в отношении моих персональных данных, которые необходимы для достижения указанных выше целей, в том числе сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передачу (предоставление, доступ), блокирование, удаление, уничтожение персональных данных, а также осуществление любых иных действий, предусмотренных действующим законодательством Российской Федерации.</p>
+  <p>Данное согласие действует до 11 сентября 2023 года. Данное согласие может быть отозвано в любой момент по моему письменному заявлению посредством его направления на адрес электронной почты.</p>
+  <p>Также даю согласие на получение информации о кандидате по сетям электросвязи, в том числе посредством использования телефонной, факсимильной, подвижной радиотелефонной связи.</p>
+  <p>Подтверждаю, что, давая такое согласие, я действую по собственной воле и в своих интересах.</p>
+  </div>
+  <div class="buttons">
+    <button id="btnyes" class="button agree">Соглашаюсь</button>
+    <button id="btnno" class="button disagree">Не соглашаюсь</button>
+  </div>
+  
+  <script>
+    let tg = window.Telegram.WebApp;
+    tg.expand()
+    
+    tg.MainButton.setText("Подтвердить"); //изменяем текст кнопки иначе
+    tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+    tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+    // Add your JavaScript code here if needed
+    let agreeButton = document.getElementById("btnyes"); //получаем кнопку скрыть/показать 
+    let disagreeButton = document.getElementById("btnno");
+
+    agreeButton.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
+      if (tg.MainButton.isVisible){ //если кнопка показана 
+         tg.MainButton.hide() //скрываем кнопку 
+         btnno.disabled = false
+      }
+      else{ //иначе
+         tg.MainButton.show() //показываем
+         btnno.disabled = true
+      }
+      
+      
+   });
+   disagreeButton.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
+      if (tg.MainButton.isVisible){ //если кнопка показана 
+         tg.MainButton.hide() //скрываем кнопку 
+         btnno.disabled = false
+      }
+      else{ //иначе
+         tg.MainButton.show() //показываем
+         btnno.disabled = true
+      }
+      
+   });
+    
+    agreeButton.addEventListener('click', function() {
+        if (disagreeButton.disabled) {
+            disagreeButton.disabled = false;
+        } else {
+            agreeButton.disabled = !agreeButton.disabled;
+        }
+    });
+
+  // Add click event listener to the disagreeButton
+    disagreeButton.addEventListener('click', function() {
+        if (agreeButton.disabled) {
+            agreeButton.disabled = false;
+        } else {
+            disagreeButton.disabled = !disagreeButton.disabled;
+        }
+    });
+
+    Telegram.WebApp.onEvent('mainButtonClicked', function(){
+        tg.sendData(disagreeButton.disabled); 
+        //при клике на основную кнопку отправляем данные в строковом виде
+    });
+</script>
+  </script>
+</body>
+</html>
