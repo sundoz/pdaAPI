@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <title>Согласие на обработку персональных данных</title>
   <style>
     /* Add your custom CSS styles here */
@@ -85,22 +86,24 @@
   <script>
     let tg = window.Telegram.WebApp;
     tg.expand()
-    
+
     tg.MainButton.setText("Подтвердить"); //изменяем текст кнопки иначе
     tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
     tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
     // Add your JavaScript code here if needed
     let agreeButton = document.getElementById("btnyes"); //получаем кнопку скрыть/показать 
     let disagreeButton = document.getElementById("btnno");
-
+    let isAgree = false
     agreeButton.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
       if (tg.MainButton.isVisible){ //если кнопка показана 
          tg.MainButton.hide() //скрываем кнопку 
-         btnno.disabled = false
+         
+         disagreeButton.disabled = false
       }
       else{ //иначе
          tg.MainButton.show() //показываем
-         btnno.disabled = true
+         
+         disagreeButton.disabled = true
       }
       
       
@@ -108,35 +111,19 @@
    disagreeButton.addEventListener('click', function(){ //вешаем событие на нажатие html-кнопки
       if (tg.MainButton.isVisible){ //если кнопка показана 
          tg.MainButton.hide() //скрываем кнопку 
-         btnno.disabled = false
+         agreeButton.disabled = false
       }
       else{ //иначе
          tg.MainButton.show() //показываем
-         btnno.disabled = true
+         agreeButton.disabled = true
       }
       
    });
     
-    agreeButton.addEventListener('click', function() {
-        if (disagreeButton.disabled) {
-            disagreeButton.disabled = false;
-        } else {
-            agreeButton.disabled = !agreeButton.disabled;
-        }
-    });
-
-  // Add click event listener to the disagreeButton
-    disagreeButton.addEventListener('click', function() {
-        if (agreeButton.disabled) {
-            agreeButton.disabled = false;
-        } else {
-            disagreeButton.disabled = !disagreeButton.disabled;
-        }
-    });
-
-    Telegram.WebApp.onEvent('mainButtonClicked', function(){
-        tg.sendData(disagreeButton.disabled); 
-        //при клике на основную кнопку отправляем данные в строковом виде
+    Telegram.WebApp.MainButton.setText('Подтвердить').onClick(function () {
+        const data = JSON.stringify({'is_agree':disagreeButton.disabled});
+        Telegram.WebApp.sendData(data);
+        Telegram.WebApp.close();
     });
 </script>
   </script>
